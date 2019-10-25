@@ -2,23 +2,25 @@ const menu = [
     {
         title:'首页',
         path: '/home',
-        icon: 'mail'
+        icon: 'fund'
     },
     {
         title: '商品管理',
-        path: '/product',
-        icon: 'mail',
+        path: '/prd',
+        icon: 'shop',
         children: [
             {
                 title:'品类管理',
                 path: '/category',
-                icon: 'mail'
+                icon: 'codepen'
             },
             {
                 title:'商品管理',
-                path: '/',
-                icon: 'mail'
+                path: '/product',
+                icon: 'ant-cloud'
             },
         ]
     }
 ]
+
+export default menu
