@@ -9,7 +9,7 @@ export default {
    },
    // 读取
    getUser() {
-        return JSON.parse(localStorage.getItem(USER_KEY)) || {}
+        return JSON.parse(localStorage.getItem(USER_KEY)) || ''
    },
    // 删除
    removeUser() {

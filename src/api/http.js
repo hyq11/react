@@ -5,7 +5,8 @@
 import axios from 'axios'
 import {  Message } from "antd";
 const api= axios.create({
-    baseURL: 'http://172.18.3.122:9527',
+    baseURL: 'http://172.18.12.192:9527',
+    // baseURL: 'http://192.168.1.5:9527',
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
         'Content-Type': 'application/json',
@@ -31,13 +32,6 @@ function http(url, data={}, method="GET") {
              Message.error('请求出错' + error) // 同意异常处理404出现报错
         })
     })
-    if(method === 'GET') {
-        return api.get(url, {
-            params: data
-        })
-    } else {
-        return api.post(url, data)
-    }
 }
 
 

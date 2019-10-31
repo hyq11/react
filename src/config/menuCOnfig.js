@@ -20,6 +20,16 @@ const menu = [
                 icon: 'ant-cloud'
             },
         ]
+    },
+    {
+        title: '角色管理',
+        path: '/role',
+        icon: 'user'
+    },
+    {
+        title: '英雄技能',
+        path: '/skill',
+        icon: 'thunderbolt'
     }
 ]
 

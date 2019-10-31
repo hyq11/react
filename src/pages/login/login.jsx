@@ -34,14 +34,13 @@ class Login extends Component {
               const {username, password} = values
               try {
                 const res = await login(username, password)
-                console.log(res)
                 if(res.code === 200) {
-                  memoryUtils.user = res.data  // 表示保存在内存中
-                  storeUtils.saveUser(res.data) // 存储在本地
-                  this.props.history.replace('/admin')
+                  memoryUtils.user = { token: res.token }  // 表示保存在内存中
+                  storeUtils.saveUser(res.token) // 存储在本地
+                  this.props.history.replace('/')
                   Message.success('登录成功')
                 } else {
-                  Message.error(res.data.message)
+                  Message.error(res.message)
                 }
               }
               catch(err) {

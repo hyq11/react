@@ -5,8 +5,10 @@ import HeaderNav from '../../components/nav/header-nav'
 import LeftNav from '../../components/nav/left-nav'
 import memoryUtils from '../../utils/memoryUtils.js'
 import Home from '../home/home'
-import Category from '../category/category'
+import Role from '../role/role'
 import Product from '../product/product'
+import Skills from '../skills/skills'
+// import Product from '../product/product'
 const {  Footer, Sider, Content } = Layout
 /**
  * 管理后台的路由组件
@@ -14,7 +16,7 @@ const {  Footer, Sider, Content } = Layout
 export default class Admin extends Component {
     render() {
         const user = memoryUtils.user
-        if(!user || !user.token) {
+        if(!user || user.token ==='') {
             // 自动调回登陆页面
             return <Redirect to="/login"/>
         }
@@ -25,11 +27,13 @@ export default class Admin extends Component {
                 </Sider>
                 <Layout>
                     <HeaderNav/>
-                    <Content style={{ }}>
+                    <Content style={{ padding: "20px"}}>
                         <Switch>
-                            <Route path="/home" component={Home}></Route>
-                            <Route path="/category" component={Category}></Route>
+                            <Route path="/home" component={Home} exact></Route>
+                            <Route path="/role" component={Role}></Route>
+                            {/* <Route path="/category" component={Category}></Route> */}
                             <Route path="/product" component={Product}></Route>
+                            <Route path="/skill" component={Skills}></Route>
                             <Redirect to="/home"/>
                         </Switch>
                     </Content>
