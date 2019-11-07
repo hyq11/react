@@ -1,13 +1,9 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { Card, Table, Button } from 'antd'
-import { skillAdd, skillList, skillUpdate, skillDel } from '../../api/skills'
+import { skillList } from '../../api/skills'
 
 const { Group } = Button
 class Product extends Component {
-    static propTypes = {
-
-    }
     state = {
         name: '',
         loading: false,

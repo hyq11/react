@@ -25,7 +25,7 @@ class AddForm extends Component {
         return (
             <Form {...formItemLayout}>
                 <Item label="角色类型">
-                    { getFieldDecorator("herotype", {
+                    { getFieldDecorator("categoryName", {
                         rules: [
                             {
                                 required: true, message: '必填'

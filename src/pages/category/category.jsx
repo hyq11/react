@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Card, Button, Icon, Table, Modal, Message } from 'antd';
-import { roleList, roleUpate, roleAdd, roleDel } from '../../api/role'
+import { categoryList, categoryUpdate, categoryAdd, categoryDel } from '../../api/category'
 import EditForm from './EditForm'
 import AddForm from './AddForm'
 
@@ -21,13 +21,13 @@ export default class category extends Component {
         const columns = [
             {
                 title: 'ID',
-                dataIndex: 'id',
-                key: 'id',
+                dataIndex: '_id',
+                key: '_id',
             },
             {
                 title: '角色名称',
-                dataIndex: 'herotype',
-                key: 'herotype',
+                dataIndex: 'categoryName',
+                key: 'categoryName',
                 width: 120
             },
             {
@@ -43,14 +43,14 @@ export default class category extends Component {
             },
             {
                 title: '操作',
-                dataIndex: 'action',
-                key: 'action',
                 align: 'center',
-                width: 150,
+                width: 250,
                 render: (_, row) => (
-                    <Group>
-                        <Button type="primary" onClick={() => this.showEditModel(row)}>edit</Button>
-                        <Button type="primary" onClick={() => this.confirmModal(row)}>del</Button>
+                    <Group size="small">
+                        <Button type="primary" onClick={() => this.showEditModel(row)}>Edit</Button>
+                        <Button type="primary" onClick={() => this.confirmModal(row)}>Del</Button>
+                        <Button type="primary" onClick={() => this.addDataSecond(row)}>Add</Button>
+                        {row.parentId === '0' && <Button type="primary" onClick={() => this.checkDetail(row)}>查看子类</Button>}
                     </Group>
                 )
             },
@@ -59,10 +59,10 @@ export default class category extends Component {
             <Button type="primary" onClick={this.addData}><Icon type="plus"></Icon>添加</Button>
         )
         const title = "首页"
-        const { dataSource, loading, visible, id, herotype, showModal } = this.state
+        const { dataSource, loading, visible, id, categoryName, showModal } = this.state
         return (
             <Card title={title} extra={extra}>
-                <Table dataSource={dataSource} columns={columns} bordered loading={loading} rowKey="id" />
+                <Table dataSource={dataSource} columns={columns} bordered loading={loading} rowKey="_id" />
                 <Modal
                     title="编辑"
                     visible={visible}
@@ -71,7 +71,7 @@ export default class category extends Component {
                     cancelText="取消"
                     onCancel={this.handleCancel}
                 >
-                    <EditForm id={id} herotype={herotype} setForm={(form) => this.form = form}></EditForm>
+                    <EditForm id={id} categoryName={categoryName} setForm={(form) => this.form = form}></EditForm>
                 </Modal>
                 <Modal
                     title="添加"
@@ -87,36 +87,35 @@ export default class category extends Component {
         )
     }
     // 获取表格数据
-    fetch = async () => {
+    fetch = async (parentId) => {
         if (this.setState.loading === true) return
         this.setState({ loading: true })
-        const { result } = await roleList()
+        const { result } = await categoryList({parentId})
         this.setState({ loading: false })
-        const dataSource = result.map(item => {
-            return {
-                id: item._id,
-                herotype: item.herotype,
-                speciality: item.speciality,
-                description: item.description
-            }
-        })
+        let dataSource = []
+        if(parentId) {
+            dataSource = result
+        } else {
+            dataSource = result.filter(item => item.parentId === '0')
+        }
+
         this.setState({ dataSource })
     }
     // 显示编辑框
     showEditModel = (row) => {
-        this.setState({ visible: true })
         this.setState({
-            id: row.id,
-            herotype: row.herotype
+            visible: true,
+            id: row._id,
+            categoryName: row.categoryName
         })
     }
     // 提交修改
     handleOk = async () => {
         const id = this.state.id
-        const herotype = this.form.getFieldValue('herotype')
+        const categoryName = this.form.getFieldValue('categoryName')
         // 清除表单数据
         this.form.resetFields()
-        await roleUpate({ id, herotype })
+        await categoryUpdate({ id, categoryName })
         this.setState({ visible: false })
         this.fetch()
     }
@@ -127,14 +126,16 @@ export default class category extends Component {
     }
     // 显示弹窗
     addData = () => {
-        this.setState({ showModal: true })
+        this.setState({
+            showModal: true
+        })
     }
     submitData = () => {
         // 发送请求
         let _this = this
         this.form2.validateFields(async (err, values) => {
             if (!err) {
-                this.add()
+                _this.add()
             } else {
                 Message.error(err)
             }
@@ -142,8 +143,9 @@ export default class category extends Component {
     }
     add = async () => {
         const values = this.form2.getFieldsValue()
-        const res = await roleAdd(values)
-        if(res.code === 200) {
+        const parentId = this.state.parentId
+        const res = await categoryAdd({parentId, ...values})
+        if (res.code === 200) {
             this.form2.resetFields()
             Message.success('添加成功✌！')
             this.setState({ showModal: false })
@@ -157,14 +159,23 @@ export default class category extends Component {
         this.form2.resetFields()
     }
     // 删除
-    confirmModal = (row)=> {
+    confirmModal = (row) => {
         confirm({
             title: '确认删除吗？',
             content: '请谨慎操作，一经删除无法恢复👌',
             onOk: async () => {
-               await roleDel({ id: row.id })
-               await this.fetch()
+                await categoryDel({ id: row._id })
+                await this.fetch()
             }
         });
+    }
+    checkDetail = (row) => {
+        this.fetch(row._id)
+    }
+    addDataSecond= (row) => {
+        this.setState({
+            parentId: row._id,
+            showModal: true
+        })
     }
 }

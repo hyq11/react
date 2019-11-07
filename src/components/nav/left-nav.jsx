@@ -9,12 +9,21 @@ import logo from '../../assets/images/logo.jpg'
 const { Item, SubMenu } = Menu
 
 class LeftNav extends Component {
-    componentWillMount() {
+    // 在render前执行一次
+    // 为第一次render准备数据
+    //设置初始状态
+    constructor(props){
+        super(props)
         this.menuNode = this.getMenuList(menuList)
     }
+    // warning:警告componentWillMount被rename，所以初始状态设置写在constructor中
+    // componentWillMount() {
+    // }
     render() {
-        const path = this.props.location.pathname
+        let path = this.props.location.pathname
+        this.path = path
         const openKey = this.openKey
+        const selectedKeys = this.findSelectPath(menuList)  // 查找详情的时候展开包含children菜单
         return (
             <div className="left-nav">
                 <header className="left-nav-header">
@@ -26,7 +35,7 @@ class LeftNav extends Component {
                 <Menu
                     mode="inline"
                     theme="dark"
-                    selectedKeys={[path]}
+                    selectedKeys={[selectedKeys]}
                     defaultOpenKeys={[openKey]}
                 >
                     {/* <Item key="/home">
@@ -57,6 +66,7 @@ class LeftNav extends Component {
                         </Item>
                     </SubMenu> */}
                     {this.menuNode}
+                    {/* {this.getMenuList(menuList)} */}
                 </Menu>
             </div>
         )
@@ -98,6 +108,7 @@ class LeftNav extends Component {
     }
     // reduce方法
     getMenuList = (menuList) => {
+        const path = this.props.location.pathname
         return menuList.reduce((pre, item) => {
             if (!item.children) {
                 pre.push((
@@ -109,9 +120,9 @@ class LeftNav extends Component {
                     </Item>
                 ))
             } else {
-                const path = this.props.location.pathname
                 // 有children的数据的时候判断路由的路径在哪一组数据中
-                const selItem = item.children.find(sItem => sItem.path === path)
+                // const selItem = item.children.find(sItem => sItem.path === path)
+                const selItem = item.children.find(sItem =>  path.indexOf(sItem.path) === 0)
                 if(selItem) {
                     this.openKey = item.path
                 }
@@ -132,6 +143,21 @@ class LeftNav extends Component {
             return pre
         }, [])
     }
+    findSelectPath = (menuList) => {
+        let b = ''
+        menuList.forEach(item => {
+            if(!item.children) {
+                if(this.path.includes(item.path)){
+                    b = item.path
+                    return
+                }
+            } else {
+                b = this.findSelectPath(item.children)
+            }
+        })
+        return b
+    }
+
 }
 
 // 使用高阶组件withRouter可以获取到props中的三大属性：history, location, match

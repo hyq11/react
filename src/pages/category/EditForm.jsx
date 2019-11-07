@@ -14,7 +14,7 @@ const formItemLayout = {
 class EditForm extends Component {
   static propTypes = {
     id: PropTypes.string.isRequired,
-    herotype: PropTypes.string.isRequired,
+    categoryName: PropTypes.string.isRequired,
     setForm: PropTypes.func.isRequired
   }
   // 同步调用
@@ -23,13 +23,13 @@ class EditForm extends Component {
     this.props.setForm(this.props.form)
   }
     render() {
-        const { getFieldDecorator, getFieldValue } = this.props.form;
+        const { getFieldDecorator } = this.props.form;
         
         return (
             <Form {...formItemLayout}>
             <Item label="角色名称">
-              {getFieldDecorator('herotype', {
-                  initialValue: this.props.herotype
+              {getFieldDecorator('categoryName', {
+                  initialValue: this.props.categoryName
               })(<Input type="text"/>)}
             </Item>
             </Form>
