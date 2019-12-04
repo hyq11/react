@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Tree } from 'antd';
-import menuList from '../../config/menuConfig.js'
+import menuList from '../../config/menuConfigs.js'
 
 const { TreeNode } = Tree;
 export default class SetForm extends Component {

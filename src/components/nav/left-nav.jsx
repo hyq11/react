@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom'
 import { Menu, Icon } from 'antd';
 
 import './left-nav.less'
-import menuList from '../../config/menuConfig'
+import menuList from '../../config/menuConfigs'
 import logo from '../../assets/images/logo.jpg'
 
 const { Item, SubMenu } = Menu
