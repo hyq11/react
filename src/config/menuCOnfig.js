@@ -22,9 +22,14 @@ const menu = [
         ]
     },
     {
+        title: '用户管理',
+        path: '/user',
+        icon: 'user'
+    },
+    {
         title: '角色管理',
         path: '/role',
-        icon: 'user'
+        icon: 'branches'
     },
     {
         title: '英雄技能',

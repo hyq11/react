@@ -16,8 +16,8 @@ class RichTextEditor extends Component {
     editorState: EditorState.createEmpty()
   }
   componentWillReceiveProps(nextProps) {
-    if (this.props.desc === nextProps.desc) {
-      // 匹配富文本编辑器格式，回显保存的内容
+    if (this.props.desc !== nextProps.desc) {
+    //   // 匹配富文本编辑器格式，回显保存的内容
       const contentBlock = htmlToDraft(nextProps.desc);
       if (contentBlock) {
         const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
@@ -31,7 +31,7 @@ class RichTextEditor extends Component {
     this.setState({
       editorState
     });
-    // this.props.changeText(draftToHtml(convertToRaw(editorState.getCurrentContent())))
+    this.props.changeText(draftToHtml(convertToRaw(editorState.getCurrentContent())))
   };
 
   render() {

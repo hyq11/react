@@ -28,13 +28,7 @@ export default class componentName extends Component {
                     <Item><span className="list_label">商品类型:</span>{data.typeid}{data.cId}</Item>
                     <Item><span className="list_label">价格元(RMB):</span>{data.price}</Item>
                     <Item><span className="list_label">图片:</span>
-                        {
-                            // console.log(Array.isArray(imgs))
-                            // console.log(imgs.length)
-                            // imgs.map((item, i) => {
-                            //     return (<span key={i}>{item}-</span>)
-                            // })
-                        }
+                        <img src={`${baseURL}/${imgs}`} width="128"/>
                     </Item>
                     <Item><span className="list_label">产地:</span>{data.origin}</Item>
                     <Item><span className="list_label">品牌:</span>{data.brand}</Item>
@@ -51,11 +45,10 @@ export default class componentName extends Component {
         const id = this.props.match.params.id
         const { result } = await productDetail({ id })
         const imgs = result.img
-        console.log(Array.isArray(imgs))
         this.setState({
             data: {imgs, ...result},
             loading: false,
-            imgs
+            imgs: imgs[0]
         })
         this.imgs = imgs
     }

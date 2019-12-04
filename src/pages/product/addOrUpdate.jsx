@@ -24,10 +24,9 @@ class AddOrUpdate extends Component {
         this.getDetail()
     }
     state = {
-        imageUrl: '',
         loading: false,
         click: false,
-        srcl: '',
+        srcl: [],
         options: []
     }
     // componentWillMount() {
@@ -90,9 +89,6 @@ class AddOrUpdate extends Component {
                             <InputNumber min={0} precision={2} />
                         )}
                     </Item>
-                    <Item label="图片">
-                        <UploadPic ref={this.pw} imgs={img}></UploadPic>
-                    </Item>
                     <Item label="产地:">
                         {
                             getFieldDecorator('origin', {
@@ -133,6 +129,9 @@ class AddOrUpdate extends Component {
                             })(<InputNumber min={0} precision={2} />)
                         }
                     </Item>
+                    <Item label="图片">
+                        <UploadPic ref={this.pw} imgs={img}></UploadPic>
+                    </Item>
                     <Item label="描述">
                         <RichTextEditor changeText={this.getRichEdit} desc={this.state.description}/>
                     </Item>
@@ -150,22 +149,27 @@ class AddOrUpdate extends Component {
     }
     // 提交表单数据
     submitData = () => {
-        this.props.form.validateFields(async (err, values) => {
+        let _this= this
+        this.props.form.validateFields( (err, values) => {
             if (err) {
                 message.err(err)
             } else {
-                const { productname, cId, price, weight, size, origin, brand } = values
-                await productAddOrUpdate({
-                    id: this.id,
-                    productname, price, weight, size, origin, brand,
-                    typeid: cId[0],
-                    cId: cId[1] ? cId[1] : '',
-                    description: this.state.description,
-                    img: this.id ? this.pw.current.getImgs() : this.state.srcl
-                })
+               _this.sendData()
                 message.success(this.id ? '编辑成功' : '添加成功')
                 this.back()
             }
+        })
+    }
+    async sendData () {
+        console.log(this.pw.current.getImgs())
+        const { productname, cId, price, weight, size, origin, brand } = this.props.form.getFieldsValue()
+        await productAddOrUpdate({
+            id: this.id,
+            productname, price, weight, size, origin, brand,
+            typeid: cId[0],
+            cId: cId[1] ? cId[1] : '',
+            description: this.state.a,
+            img: this.pw.current.getImgs()
         })
     }
     // 获取商品详情
@@ -238,7 +242,7 @@ class AddOrUpdate extends Component {
     }
     getRichEdit = (value) => {
         this.setState({
-            description: value
+            a: value
         })
     }
 }

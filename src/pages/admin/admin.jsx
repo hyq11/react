@@ -5,10 +5,11 @@ import HeaderNav from '../../components/nav/header-nav'
 import LeftNav from '../../components/nav/left-nav'
 import memoryUtils from '../../utils/memoryUtils.js'
 import Home from '../home/home'
-// import Role from '../role/role'
+import Role from '../role/role'
 import Product from '../product/product'
 import Skills from '../skills/skills'
 import Category from '../category/category'
+import User from '../user/user'
 const {  Footer, Sider, Content } = Layout
 /**
  * 管理后台的路由组件
@@ -30,10 +31,11 @@ export default class Admin extends Component {
                     <Content style={{ padding: "20px"}}>
                         <Switch>
                             <Route path="/home" component={Home} exact></Route>
-                            {/* <Route path="/role" component={Role}></Route> */}
+                            <Route path="/role" component={Role}></Route>
                             <Route path="/category" component={Category}></Route>
                             <Route path="/product" component={Product}></Route>
                             <Route path="/skill" component={Skills}></Route>
+                            <Route path="/user" component={User}></Route>
                             <Redirect to="/home"/>
                         </Switch>
                     </Content>
