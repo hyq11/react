@@ -1,7 +1,14 @@
 import React, { Component } from "react";
-import { Form, Icon, Input, Button } from "antd";
+import { Form, Icon, Input, Button, Message } from "antd";
+import { Redirect } from 'react-router-dom'
 import "./login.less";
 import logo from "./images/logo.jpg";
+import { login } from '../../api/index'
+import memoryUtils from '../../utils/memoryUtils.js'
+import storeUtils from '../../utils/storeUtils'
+
+// import '../../mock/login.js'
+
 /**
  * 登录时的路由组件
  */
@@ -18,12 +25,27 @@ class Login extends Component {
         // const value = this.props.form.getFieldsValue()
         
         // 表单组件的统一验证
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async (err, values) => {
             // values这个是表达数据集
             // values和value的值相同
             if(err) {
                 return
             } else {
+              const {username, password} = values
+              try {
+                const res = await login(username, password)
+                if(res.code === 200) {
+                  memoryUtils.user = { token: res.token }  // 表示保存在内存中
+                  storeUtils.saveUser(res.token) // 存储在本地
+                  this.props.history.replace('/')
+                  Message.success('登录成功')
+                } else {
+                  Message.error(res.message)
+                }
+              }
+              catch(err) {
+                console.log(err)
+              }
             }
         })
     }
@@ -41,6 +63,11 @@ class Login extends Component {
     }
   render() {
     const {getFieldDecorator} = this.props.form; 
+    // 如果用户已经登陆，直接跳转到admin
+    const user = memoryUtils.user
+    if(user.token) {
+      return <Redirect to='/'/>
+    }
     return (
       <div className="login">
         <header className="login-header">

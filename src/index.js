@@ -2,7 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 // import * as serviceWorker from './serviceWorker';
+import storeUtils from './utils/storeUtils.js';
+import memoryUtils from './utils/memoryUtils';
 
+// 读取local中的user,保存到内存中
+const token = storeUtils.getUser()
+memoryUtils.user = { token }
 ReactDOM.render(<App />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
