@@ -21,7 +21,8 @@ export default class Role extends Component {
         visible: false,
         visible2: false,
         id: '',
-        checkedKeys: []
+        checkedKeys: [],
+        loading: false
     }
     componentDidMount() {
         this.fetch()
@@ -43,6 +44,7 @@ export default class Role extends Component {
                     rowKey="_id"
                     rowSelection={{ type: 'radio', columnWidth: 80, selectedRowKeys: [role._id]}}
                     onRow={this.onRow}
+                    loading={this.state.loading}
                 ></Table>
                 <Modal
                     title="角色添加"
@@ -60,7 +62,8 @@ export default class Role extends Component {
                     okText="提交"
                     cancelText="取消"
                     onCancel={this.handleCancel}>
-                        <SetForm ref={this.property} checkedKeys={this.state.checkedKeys}></SetForm>
+                        {/* <SetForm ref={this.property} checkedKeys={this.state.checkedKeys}></SetForm> */}
+                        <SetForm handleOnCheck={this.handleOnCheck} checkedKeys={this.state.checkedKeys}></SetForm>
                 </Modal>
             </Card>
         )
@@ -94,6 +97,10 @@ export default class Role extends Component {
     }
     // 列表数据
     fetch = async () => {
+        if(this.state.loading) return
+        this.setState({
+            loading: true
+        })
         try {
             const { result } = await roleList()
             this.setState({
@@ -101,7 +108,11 @@ export default class Role extends Component {
             })
         } catch (err) {
             message.error(err.message)
-        }
+        } finally {
+            this.setState({
+                loading: false
+            })
+        } 
     }
     // 显示添加角色的Modal
     createRole = () => {
@@ -134,7 +145,7 @@ export default class Role extends Component {
     }
     // 设置权限
     handleSubmit = async () => {
-        let checkedKeys  = this.property.current.getMenus()
+        let checkedKeys  = this.state.checkedKeys
         let id = this.state.role._id
         try {
 
@@ -186,5 +197,13 @@ export default class Role extends Component {
                 })
             }
         }
+    }
+    // 获取menus数据
+    handleOnCheck = (checkedKeys) => {
+        this.setState({
+            checkedKeys
+        }, ()=>{ 
+            console.log(checkedKeys)
+        })
     }
 }

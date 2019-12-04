@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Form, Input, Select } from 'antd';
-const { Option } = Select;
+import { Form, Input, Select, message } from 'antd';
+import { roleList } from '../../api/role'
 
+const { Option } = Select;
 const { Item } = Form
 const formItemLayot = {
     labelCol: { span: 4 },
@@ -11,7 +12,8 @@ const formItemLayot = {
 class AddForm extends Component {
     static propTypes = {
         formData: PropTypes.object,
-        form1: PropTypes.func
+        form1: PropTypes.func,
+        onChange: PropTypes.func
     }
     static defaultProps = {
         formData: {
@@ -23,16 +25,33 @@ class AddForm extends Component {
         }
     };
     state = {
-        arr: []
+        roles: []
     }
     componentDidUpdate(){
         this.props.form1(this.props.form)
+    }
+    componentDidMount () {
+        this.getRoleList()
+    }
+    getRoleList = async () => {
+        try {
+            const res = await roleList()
+            if(res.code === 200) {
+                this.setState({
+                    roles: res.result
+                })
+            }
+        }
+        catch(err) {
+            message.error(err.message)
+        }
     }
 
     render() {
         const { getFieldDecorator } = this.props.form
         const { username, password, phone, email, roleId } = this.props.formData
-
+        const { roles } = this.state
+        const { onChange } = this.props
         return (
             <Form {...formItemLayot}>
                 <Item label="用户名">
@@ -76,8 +95,12 @@ class AddForm extends Component {
                         getFieldDecorator('roleId', {
                             initialValue: roleId
                         })(
-                            <Select>
-                                <Option value="123">123</Option>
+                            <Select onChange={onChange}>
+                                {
+                                    roles.map(item => {
+                                    return (<Option key={item._id} value={item._id}>{item.name}</Option>)
+                                    })
+                                }
                             </Select>
                         )
                     }

@@ -55,7 +55,8 @@ export default class componentName extends Component {
                 width: 80,
                 align: 'center',
                 render: (_, row) => {
-                    return (<Avatar shape="square" size={50} src={`${baseURL}${row.img[0]}`}></Avatar>)
+                    // return (<Avatar shape="square" size={50} src={`${baseURL}${row.img[0]}`}></Avatar>)
+                    return (<span>123</span>)
                 }
             },
             {

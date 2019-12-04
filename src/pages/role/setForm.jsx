@@ -6,22 +6,9 @@ import menuList from '../../config/menuConfig.js'
 const { TreeNode } = Tree;
 export default class SetForm extends Component {
     static propTypes = {
-        checkedKeys: PropTypes.array
+        checkedKeys: PropTypes.array,
+        handleOnCheck: PropTypes.func
     }
-    constructor (props) {
-        super(props)
-        const menus = this.props.checkedKeys
-        this.state = {
-            autoExpandParent: true,
-            checkedKeys: menus // 选中没有更新
-        }
-    }
-    // 根据传入的新值来更新checkedKeys
-    // componentWillReceiveProps(next) {
-    //     this.setState({
-    //         checkedKeys: next.checkedKeys
-    //     })
-    // }
     // 展开
     handleOnExpand = expandedKeys => {
         this.setState({
@@ -29,13 +16,7 @@ export default class SetForm extends Component {
             autoExpandParent: false,
         })
     }
-    // 切换
-    getMenus = () => this.state.checkedKeys
-    handleOnCheck = checkedKeys => {
-        console.log(checkedKeys)
-        this.setState({ checkedKeys })
-    }
-    // map方法来处理权限数据
+    //map方法来处理权限数据
     renderTreeNodes = data =>
         data.map(item => {
             if (item.children) {
@@ -50,22 +31,17 @@ export default class SetForm extends Component {
     componentWillMount () {
         this.treeNodes = this.getTreeNodes(menuList)
     }
-    clearData = () => {
-        this.setState({
-            checkedKeys: []
-        }, ()=> {
-            console.log(this.state.che)
-        })
-    }
+
     render() {
+        const {checkedKeys, handleOnCheck} = this.props
         return (
             <div>
                  <Tree
                     checkable
                     defaultExpandAll={true}
-                    onCheck={this.handleOnCheck}
+                    onCheck={handleOnCheck}
                     onExpand={this.handleOnExpand}
-                    checkedKeys={this.state.checkedKeys}
+                    checkedKeys={checkedKeys}
                 >
                     {this.treeNodes}
                     {/* <TreeNode title="平台权限" key="all">
