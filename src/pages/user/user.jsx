@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { Card, Table, Button, Modal, message } from 'antd'
-import { userList, userAdd, userInfo, userUpdate } from '../../api/user'
+import { userList, userAdd, userInfo, userUpdate, userRemove } from '../../api/user'
 import { roleList } from '../../api/role'
 import AddForm from './addForm'
 import { dealTime } from '../../utils/tools'
 const { Group } = Button
+const Confirm = Modal.confirm
 export default class User extends Component {
 
     constructor(prop) {
@@ -115,7 +116,7 @@ export default class User extends Component {
                     return (
                         <Group size="small">
                             <Button type="primary" onClick={() => that.edit(row._id)}>修改</Button>
-                            <Button type="danger">删除</Button>
+                            <Button type="danger" onClick={() => that.del(row._id)}>删除</Button>
                         </Group>
                     )
                 }
@@ -131,18 +132,14 @@ export default class User extends Component {
             } else {
                 try {
                     if (that.state.userId) {
-                        const res = await userUpdate(Object.assign(values, 
-                            { id: this.state.userId,
+                       await userUpdate(Object.assign(values, 
+                            {   
+                                id: this.state.userId,
                                 roleName: this.state.roleName 
                             }))
-                        if(res.code === 200) {
-                            message.success('编辑成功')
-                        } else {
-                            message.error(res.message)
-                            return
-                        }
                     } else {
-                        await userAdd(values)
+                        await userAdd(Object.assign(values, 
+                            { roleName: this.state.roleName }))
                         message.success('新增成功')
                     }
                 }
@@ -157,6 +154,7 @@ export default class User extends Component {
     // 关闭弹窗
     handleCancel = () => {
         this.setState({ visible: false })
+        this.form.resetFields()
     }
     // 打开弹窗
     showModal = () => {
@@ -171,6 +169,7 @@ export default class User extends Component {
             const res = await userInfo({ id })
             this.setState({
                 formData: res.result,
+                roleName: res.result.roleName,
                 visible: true,
                 userId: id
             })
@@ -178,12 +177,26 @@ export default class User extends Component {
             message.error(err.message)
         }
     }
-    //
     onChange = (value) => {
         const list = this.state.roles
         const roleInfo = list.find(item => item._id === value)
         this.setState({
             roleName: roleInfo.name
+        })
+    }
+    del = (id) => {
+        Confirm({
+            title: '确定删除吗？',
+            content: '请谨慎操作！！！',
+            onOk: async () => {
+                try {
+                    await userRemove({id})
+                    message.success('删除成功')
+                    await this.fetch()
+                }catch(err) {
+                    message.error(err.message)
+                }
+            }
         })
     }
 }

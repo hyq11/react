@@ -26,7 +26,11 @@ function http(url, data={}, method="GET") {
         }
         // 2.成功了执行resolve
         promise.then(response => {
-            resolve(response.data)
+            if(response.data.code === 200) {
+                resolve(response.data)
+            } else {
+                reject(response.data)
+            }
         }).catch(error => {
             // 3.错误执行,不用调用reject(json), 而是提示异常信息
              Message.error('请求出错' + error) // 同意异常处理404出现报错
