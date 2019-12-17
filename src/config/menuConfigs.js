@@ -35,6 +35,23 @@ const menu = [
         title: '英雄技能',
         path: '/skill',
         icon: 'thunderbolt'
+    },
+    {
+        title: '上传文件',
+        path: '/upload',
+        icon: 'plus',
+        children: [
+            {
+                title: '上传文件',
+                path: '/file',
+                icon: 'plus',
+            },
+            {
+                title: '动画试验田',
+                path: '/animal',
+                icon: 'cloud',
+            }
+        ]
     }
 ]
 

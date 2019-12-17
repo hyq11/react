@@ -9,8 +9,9 @@ const api= axios.create({
     // baseURL: 'http://192.168.1.8:9527',
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
-        'Content-Type': 'application/json',
-        'timeout': 1000
+        // 'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        'timeout': 1000,
     }
 })
 function http(url, data={}, method="GET") {

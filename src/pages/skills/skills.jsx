@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import { Card, Table, Button } from 'antd'
-import { skillList } from '../../api/skills'
+import { Card, Table, Button, Modal, message } from 'antd'
+import { skillList,skillDel } from '../../api/skills'
+import AddForm from './addForm'
 
 const { Group } = Button
+const Confirm = Modal.confirm
 class Product extends Component {
     state = {
         name: '',
@@ -72,12 +74,10 @@ class Product extends Component {
             },
             {
                 title: '操作',
-                dataIndex: 'action',
-                key: 'action',
-                render: () => (
+                render: (row) => (
                     <Group>
-                        <Button>edit</Button>
-                        <Button>del</Button>
+                        <AddForm list={this} {...row}></AddForm>
+                        <Button onClick={() => this.remove(row._id)}>del</Button>
                     </Group>
                 )
             }
@@ -87,7 +87,8 @@ class Product extends Component {
             <Button type="primary">搜索</Button>
         )
         const title = (
-            <Button>新增</Button>
+            <AddForm></AddForm>
+            // <Button onClick={this.add}>新增</Button>
         )
         const { loading, dataSource } = this.state
         return (
@@ -104,6 +105,21 @@ class Product extends Component {
         const { result } =  await skillList(sendData)
         this.setState({ dataSource: result }, ()=>{
             this.setState({ loading: false})
+        })
+    }
+    // 新增hero技能数据
+    remove = (id) => {
+        Confirm({
+            title: '确定删除吗？',
+            onOk: async ()=> {
+                try {
+                    await skillDel({id})
+                    message.success('删除成功!')
+                    await this.fetch()
+                } catch(err) {
+                    message.error(err.message)
+                }
+            }
         })
     }
 }

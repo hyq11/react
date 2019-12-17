@@ -1,6 +1,6 @@
 import http from './http'
 
-export const baseURL = 'http://172.18.12.19:9527/public/arms/'
+export const baseURL = 'http://172.18.12.19:9527/public/upload/'
 
 // export const baseURL = 'http://192.168.1.8:9527'
 export const productList = (params) => http('/product/list', params)

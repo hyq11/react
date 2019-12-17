@@ -161,7 +161,7 @@ class AddOrUpdate extends Component {
         })
     }
     async sendData () {
-        console.log(this.pw.current.getImgs())
+        let imgs = this.pw.current.getImgs()
         const { productname, cId, price, weight, size, origin, brand } = this.props.form.getFieldsValue()
         await productAddOrUpdate({
             id: this.id,
@@ -169,7 +169,7 @@ class AddOrUpdate extends Component {
             typeid: cId[0],
             cId: cId[1] ? cId[1] : '',
             description: this.state.a,
-            img: this.pw.current.getImgs()
+            img: imgs
         })
     }
     // 获取商品详情

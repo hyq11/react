@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { Card, Button, Modal, Table, message, Input } from 'antd'
 import { dealTime } from '../../utils/tools'
 import { roleList, roleAdd, roleSetProperty, roleGetProperty } from '../../api/role'

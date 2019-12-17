@@ -10,7 +10,9 @@ import Product from '../product/product'
 import Skills from '../skills/skills'
 import Category from '../category/category'
 import User from '../user/user'
-const {  Footer, Sider, Content } = Layout
+import UploadTest from '../UploadTest/UploadTest'
+import Animal from '../UploadTest/animal'
+const { Sider, Content } = Layout
 /**
  * 管理后台的路由组件
  */
@@ -36,10 +38,12 @@ export default class Admin extends Component {
                             <Route path="/product" component={Product}></Route>
                             <Route path="/skill" component={Skills}></Route>
                             <Route path="/user" component={User}></Route>
+                            <Route path="/file" component={UploadTest}></Route>
+                            <Route path="/animal" component={Animal}></Route>
                             <Redirect to="/home"/>
                         </Switch>
                     </Content>
-                    <Footer><p>推荐使用谷歌浏览器访问，效果更佳呦':)'</p></Footer>
+                    {/* <Footer><p>推荐使用谷歌浏览器访问，效果更佳呦':)'</p></Footer> */}
                 </Layout>
             </Layout>
         )

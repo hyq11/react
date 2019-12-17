@@ -1,0 +1,20 @@
+.move {
+    width: 80px;
+    animation: mv 2s linear;
+    perspective: 1000px;
+    transform: all 2s;
+}
+@keyframes mv {
+    0%{
+        width: 80px;
+        transform: rotate(0);
+    }
+    50%{
+        width: 300px;
+        transform: rotate(180);
+    }
+    100%{
+        width: 80px;
+        transform: rotate(360);
+    }
+}

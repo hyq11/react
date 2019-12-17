@@ -32,6 +32,7 @@ class UploadPic extends Component {
      */
     componentWillReceiveProps() {
         const { imgs } = this.props
+        console.log(imgs)
         let fileList = []
         if (imgs && imgs.length) {
             fileList = imgs.map((item, index) => ({
@@ -41,7 +42,9 @@ class UploadPic extends Component {
                 url: baseURL + item,
             }))
         }
-        this.setState({ fileList })
+        this.setState({ fileList }, ()=> {
+            console.log(this.state.fileList)
+        })
     }
     // 隐藏预览
     handleCancel = () => this.setState({ previewVisible: false });
@@ -58,6 +61,7 @@ class UploadPic extends Component {
     };
     // 图片修改
     handleChange = ({ file, fileList }) => {
+        console.log(file)
         const res = file.response
         if (file.status === "done") {
             if (res.code === 200) {
@@ -65,7 +69,7 @@ class UploadPic extends Component {
                 file.url = res.src
             }
         }
-        this.setState({ fileList})
+        this.setState({fileList})
     };
 
     render() {
@@ -79,10 +83,10 @@ class UploadPic extends Component {
         return (
             <div className="clearfix">
                 <Upload
-                    action="/file/photos/upload"
+                    action="/upload/file"
                     accept='image/*' /* 只接收图片类型的*/
                     listType="picture-card"
-                    name="image" // 请求参数名
+                    name="img" // 请求参数名
                     fileList={fileList || this.fileList} /*已上传文件的列表*/
                     onPreview={this.handlePreview}
                     onChange={this.handleChange}
