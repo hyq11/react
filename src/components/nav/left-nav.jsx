@@ -5,20 +5,53 @@ import { Menu, Icon } from 'antd';
 import './left-nav.less'
 import menuList from '../../config/menuConfigs'
 import logo from '../../assets/images/logo.jpg'
+import { roleGetProperty } from '../../api/role'
+import storeUtils from '../../utils/storeUtils.js'
 
 const { Item, SubMenu } = Menu
 
+function filt(menu, arr) {
+    return menu.filter(item => {
+        if(item.children) {
+            item.children = filt(item.children, arr)
+            return item
+        } else if(arr.includes(item.path)){
+            return item
+        }
+    })
+}
 class LeftNav extends Component {
     // 在render前执行一次
     // 为第一次render准备数据
     //设置初始状态
-    constructor(props){
+    constructor(props) {
         super(props)
-        this.menuNode = this.getMenuList(menuList)
+        // this.menuNode = this.getMenuList(menuList)
+    }
+    state = {
+        menuNode: []
     }
     // warning:警告componentWillMount被rename，所以初始状态设置写在constructor中
     // componentWillMount() {
     // }
+    componentDidMount() {
+        const roleId = storeUtils.getUser('ROLE_ID')
+        this.getProperty(roleId)
+    }
+    getProperty = (id) => {
+        roleGetProperty({ id })
+            .then(({ result }) => {
+                const arr = result.menus
+                const menus = filt(menuList, arr)
+                console.log(menus)
+                this.setState({
+                    menuNode: this.getMenuList(menus)
+                })
+                // console.log(this.menuNode)
+            }).catch(err => {
+               console.log(err.message)
+            })
+    }
     render() {
         let path = this.props.location.pathname
         this.path = path
@@ -65,7 +98,7 @@ class LeftNav extends Component {
                             </Link>
                         </Item>
                     </SubMenu> */}
-                    {this.menuNode}
+                    {this.state.menuNode}
                     {/* {this.getMenuList(menuList)} */}
                 </Menu>
             </div>
@@ -122,8 +155,8 @@ class LeftNav extends Component {
             } else {
                 // 有children的数据的时候判断路由的路径在哪一组数据中
                 // const selItem = item.children.find(sItem => sItem.path === path)
-                const selItem = item.children.find(sItem =>  path.indexOf(sItem.path) === 0)
-                if(selItem) {
+                const selItem = item.children.find(sItem => path.indexOf(sItem.path) === 0)
+                if (selItem) {
                     this.openKey = item.path
                 }
                 pre.push((
@@ -146,8 +179,8 @@ class LeftNav extends Component {
     findSelectPath = (menuList) => {
         let b = ''
         menuList.forEach(item => {
-            if(!item.children) {
-                if(this.path.includes(item.path)){
+            if (!item.children) {
+                if (this.path.includes(item.path)) {
                     b = item.path
                     return
                 }

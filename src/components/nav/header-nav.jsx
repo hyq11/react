@@ -38,14 +38,15 @@ class HeaderNav extends Component {
         const { time } = this.state
         return (
             <div className="header-nav">
-                <div>欢迎<span className="username">admin</span><span className="logout" onClick={this.logout}><Icon type="logout" /> 退出登录</span></div>
+                <div>欢迎<span className="username">{storeUtils.getUser('USER_NAME')}</span><span className="logout" onClick={this.logout}><Icon type="logout" /> 退出登录</span></div>
                 <div className="time">{ time }</div>
             </div>
         )
     }
     logout = () => {
         memoryUtils.user = {}
-        storeUtils.removeUser()
+        storeUtils.removeUser("USER_KEY")
+        storeUtils.removeUser("ROLE_ID")
         this.props.history.replace('/login')
     }
 }

@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 import { Layout } from 'antd'
 import HeaderNav from '../../components/nav/header-nav'
 import LeftNav from '../../components/nav/left-nav'
-import memoryUtils from '../../utils/memoryUtils.js'
+import storeUtils from '../../utils/storeUtils.js'
 import Home from '../home/home'
 import Role from '../role/role'
 import Product from '../product/product'
@@ -12,15 +12,17 @@ import Category from '../category/category'
 import User from '../user/user'
 import UploadTest from '../UploadTest/UploadTest'
 import Animal from '../UploadTest/animal'
+
 const { Sider, Content } = Layout
 /**
  * 管理后台的路由组件
  */
 export default class Admin extends Component {
     render() {
-        const user = memoryUtils.user
-        if(!user || user.token ==='') {
+        const token = storeUtils.getUser('USER_KEY')
+        if(!token || token === '') {
             // 自动调回登陆页面
+            console.log(token)
             return <Redirect to="/login"/>
         }
         return (

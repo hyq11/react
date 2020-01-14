@@ -33,14 +33,20 @@ class Login extends Component {
             } else {
               const {username, password} = values
               try {
-                const res = await login(username, password)
-                if(res.code === 200) {
-                  memoryUtils.user = { token: res.token }  // 表示保存在内存中
-                  storeUtils.saveUser(res.token) // 存储在本地
+                const {token, result, message, code} = await login(values)
+                if(code === 200) {
+                  memoryUtils.user = { 
+                    token: token, 
+                    role: result.roleId,
+                    username: result.username
+                  }  // 表示保存在内存中
+                  storeUtils.saveUser('USER_KEY', token) // 存储在本地
+                  storeUtils.saveUser('ROLE_ID', result.roleId) // 存储在本地
+                  storeUtils.saveUser('USER_NAME', result.username) // 存储在本地
                   this.props.history.replace('/')
                   Message.success('登录成功')
                 } else {
-                  Message.error(res.message)
+                  Message.error(message)
                 }
               }
               catch(err) {

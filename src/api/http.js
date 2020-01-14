@@ -5,12 +5,11 @@
 import axios from 'axios'
 import {  Message } from "antd";
 const api= axios.create({
-    baseURL: 'http://172.18.12.19:9527',
+    baseURL: 'http://172.18.12.144:9527',
     // baseURL: 'http://192.168.1.8:9527',
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
-        // 'Content-Type': 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        'Content-Type': 'application/json',
         'timeout': 1000,
     }
 })
