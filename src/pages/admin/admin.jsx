@@ -12,7 +12,8 @@ import Category from '../category/category'
 import User from '../user/user'
 import UploadTest from '../UploadTest/UploadTest'
 import Animal from '../UploadTest/animal'
-
+import routes from '../../routers' 
+console.log(routes);
 const { Sider, Content } = Layout
 /**
  * 管理后台的路由组件
@@ -34,6 +35,13 @@ export default class Admin extends Component {
                     <HeaderNav/>
                     <Content style={{ padding: "20px"}}>
                         <Switch>
+                            {
+                                // routes.map((item, i) => {
+                                //     return (
+                                //         <Route key={i} path={item.path} component={item.components} exact/>
+                                //     )
+                                // })
+                            }
                             <Route path="/home" component={Home} exact></Route>
                             <Route path="/role" component={Role}></Route>
                             <Route path="/category" component={Category}></Route>

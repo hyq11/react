@@ -5,7 +5,8 @@
 import axios from 'axios'
 import {  Message } from "antd";
 const api= axios.create({
-    baseURL: 'http://172.18.12.144:9527',
+    // baseURL: 'http://172.18.12.144:9527',
+    baseURL: 'http://172.18.12.90:9527',
     // baseURL: 'http://192.168.1.8:9527',
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
