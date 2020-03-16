@@ -67,4 +67,6 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
 
-async 写在离await最近的函数的外面
+async 写在离await最近的函数的
+
+发现这个admin中的react路由，使用map渲染，不起作用
